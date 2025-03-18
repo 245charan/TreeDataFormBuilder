@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Issues Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Course Issues Tracker</h1>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">Issue Tracker</a>
+                <a href="records.html" class="nav-link">Records Viewer</a>
+            </nav>
+        </header>
+
+        <!-- Home Screen -->
+        <div id="homeScreen" class="screen active">
+            <div class="card">
+                <h2>Enter Course Information</h2>
+                <div class="form-group">
+                    <label for="courseId">Course ID:</label>
+                    <input type="text" id="courseId" placeholder="Enter Course ID">
+                </div>
+                <div class="form-group">
+                    <label for="courseName">Course Name:</label>
+                    <input type="text" id="courseName" placeholder="Enter Course Name">
+                </div>
+                <div class="form-group">
+                    <label for="facultyEmail">Faculty Email:</label>
+                    <input type="email" id="facultyEmail" placeholder="Enter Faculty Email">
+                </div>
+                <button id="startBuildingBtn" class="btn primary">Start Building Course Structure</button>
+            </div>
+
+            <div class="card">
+                <div class="saved-drafts-header">
+                    <h2>Saved Drafts</h2>
+                    <button id="clearAllDraftsBtn" class="btn secondary small">Clear All Drafts</button>
+                </div>
+                <div id="savedDraftsList" class="list-container">
+                    <!-- Saved drafts will be listed here -->
+                    <p class="empty-message">No saved drafts found.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Builder Screen -->
+        <div id="builderScreen" class="screen">
+            <div class="navigation">
+                <button id="backToHomeBtn" class="btn secondary"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 id="courseHeader">Building Structure for: </h2>
+            </div>
+
+            <div class="card">
+                <div class="unit-controls">
+                    <h3>Units</h3>
+                    <div class="counter-controls">
+                        <label>Number of Units:</label>
+                        <button id="decreaseUnitBtn" class="btn small">-</button>
+                        <span id="unitCount">0</span>
+                        <button id="increaseUnitBtn" class="btn small">+</button>
+                    </div>
+                </div>
+                
+                <div id="unitsContainer" class="units-container">
+                    <!-- Units will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="saveProgressBtn" class="btn secondary">Save Progress</button>
+                <button id="reviewBtn" class="btn primary">Review and Submit</button>
+            </div>
+        </div>
+
+        <!-- Issues Screen -->
+        <div id="issuesScreen" class="screen">
+            <div class="navigation">
+                <button id="backToBuilderBtn" class="btn secondary"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 id="issueTargetHeader">Select Issues for: </h2>
+            </div>
+
+            <div class="card">
+                <div id="issuesList" class="issues-list">
+                    <!-- Issue types will be listed here -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="doneSelectingIssuesBtn" class="btn primary">Done</button>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div id="reviewScreen" class="screen">
+            <div class="navigation">
+                <button id="backToBuilderFromReviewBtn" class="btn secondary"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 id="reviewHeader">Review Issues for: </h2>
+            </div>
+
+            <div class="card">
+                <h3 id="totalIssuesCount">Total Issues Found: 0</h3>
+                <div id="selectedIssuesList" class="selected-issues-list">
+                    <!-- Selected issues will be listed here -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="submitIssuesBtn" class="btn primary">Submit All Issues</button>
+            </div>
+        </div>
+
+        <!-- Confirmation Screen -->
+        <div id="confirmationScreen" class="screen">
+            <div class="card">
+                <div class="confirmation-message">
+                    <i class="fas fa-check-circle"></i>
+                    <h2 id="confirmationMessage">All issues have been submitted successfully!</h2>
+                </div>
+                <div class="action-buttons">
+                    <button id="sendEmailBtn" class="btn secondary">Send Email to Instructor</button>
+                    <button id="returnHomeBtn" class="btn primary">Return to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="unitTemplate">
+        <div class="unit-item" data-unit-index="">
+            <div class="unit-header">
+                <div class="form-group">
+                    <input type="text" class="unit-name" placeholder="Enter Unit Name">
+                </div>
+                <button class="check-issues-btn btn small">Check Issues</button>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="unit-content">
+                <div class="folder-controls">
+                    <h4>Folders</h4>
+                    <div class="counter-controls">
+                        <label>Number of Folders:</label>
+                        <button class="decrease-folder-btn btn small">-</button>
+                        <span class="folder-count">0</span>
+                        <button class="increase-folder-btn btn small">+</button>
+                    </div>
+                </div>
+                <div class="folders-container">
+                    <!-- Folders will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="folderTemplate">
+        <div class="folder-item" data-unit-index="" data-folder-index="">
+            <div class="folder-header">
+                <div class="form-group">
+                    <input type="text" class="folder-name" placeholder="Enter Folder Name">
+                </div>
+                <button class="check-issues-btn btn small">Check Issues</button>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="folder-content">
+                <div class="file-controls">
+                    <h4>Files</h4>
+                    <div class="counter-controls">
+                        <label>Number of Files:</label>
+                        <button class="decrease-file-btn btn small">-</button>
+                        <span class="file-count">0</span>
+                        <button class="increase-file-btn btn small">+</button>
+                    </div>
+                </div>
+                <div class="files-container">
+                    <!-- Files will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="fileTemplate">
+        <div class="file-item" data-unit-index="" data-folder-index="" data-file-index="">
+            <div class="file-header">
+                <div class="form-group">
+                    <input type="text" class="file-name" placeholder="Enter File Name">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="file-type" placeholder="Enter File Type">
+                </div>
+                <button class="check-issues-btn btn small">Check Issues</button>
+            </div>
+        </div>
+    </template>
+
+    <template id="issueTemplate">
+        <div class="issue-item" data-issue-id="">
+            <div class="issue-header">
+                <input type="checkbox" class="issue-checkbox">
+                <div class="issue-info">
+                    <h4 class="issue-name"></h4>
+                    <p class="issue-description"></p>
+                </div>
+            </div>
+            <div class="issue-notes hidden">
+                <textarea placeholder="Enter notes about this issue"></textarea>
+            </div>
+        </div>
+    </template>
+
+    <template id="selectedIssueTemplate">
+        <div class="selected-issue-item">
+            <div class="issue-location"></div>
+            <div class="issue-details">
+                <h4 class="issue-name"></h4>
+                <p class="issue-notes"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="savedDraftTemplate">
+        <div class="saved-draft-item" data-draft-id="">
+            <div class="draft-info">
+                <h4 class="draft-name"></h4>
+                <p class="draft-date"></p>
+            </div>
+            <div class="draft-actions">
+                <button class="load-draft-btn btn small">Load</button>
+                <button class="delete-draft-btn btn small danger">Delete</button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal for email sending -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Send Email to Instructor</h2>
+            <div class="form-group">
+                <label for="emailSubject">Subject:</label>
+                <input type="text" id="emailSubject" value="Course Issues Report">
+            </div>
+            <div class="form-group">
+                <label for="emailBody">Email Body:</label>
+                <textarea id="emailBody" rows="10"></textarea>
+            </div>
+            <div class="action-buttons">
+                <button id="cancelEmailBtn" class="btn secondary">Cancel</button>
+                <button id="sendEmailConfirmBtn" class="btn primary">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issue Types Data -->
+    <script src="issueTypes.js"></script>
+    <!-- Main Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

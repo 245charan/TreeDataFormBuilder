@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Records Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Course Issues Records Viewer</h1>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Issue Tracker</a>
+                <a href="records.html" class="nav-link active">Records Viewer</a>
+            </nav>
+        </header>
+
+        <!-- Search Screen -->
+        <div id="searchScreen" class="screen active">
+            <div class="card">
+                <h2>Search Course Records</h2>
+                <div class="form-group">
+                    <label for="searchCourseId">Course ID:</label>
+                    <input type="text" id="searchCourseId" placeholder="Enter Course ID">
+                </div>
+                <div class="form-group">
+                    <label for="searchCourseName">Course Name:</label>
+                    <input type="text" id="searchCourseName" placeholder="Enter Course Name">
+                </div>
+                <div class="form-group">
+                    <label for="searchFacultyEmail">Faculty Email:</label>
+                    <input type="email" id="searchFacultyEmail" placeholder="Enter Faculty Email">
+                </div>
+                <div class="form-group">
+                    <label for="searchDateFrom">Date From:</label>
+                    <input type="date" id="searchDateFrom">
+                </div>
+                <div class="form-group">
+                    <label for="searchDateTo">Date To:</label>
+                    <input type="date" id="searchDateTo">
+                </div>
+                <div class="form-group">
+                    <label for="searchIssueType">Issue Type:</label>
+                    <select id="searchIssueType">
+                        <option value="">All Issue Types</option>
+                        <!-- Issue types will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="searchStatus">Status:</label>
+                    <select id="searchStatus">
+                        <option value="">All Statuses</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+                <button id="searchBtn" class="btn primary">Search Records</button>
+                <button id="clearSearchBtn" class="btn secondary">Clear Search</button>
+            </div>
+
+            <div class="card">
+                <div class="results-header">
+                    <h2>Search Results</h2>
+                    <div class="export-controls">
+                        <button id="exportCsvBtn" class="btn secondary" disabled>Export to CSV</button>
+                    </div>
+                </div>
+                <div id="searchResults" class="results-container">
+                    <p class="empty-message">No records found. Please search for courses.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Details Screen -->
+        <div id="courseDetailsScreen" class="screen">
+            <div class="navigation">
+                <button id="backToSearchBtn" class="btn secondary"><i class="fas fa-arrow-left"></i> Back to Search</button>
+                <h2 id="courseDetailsHeader">Course Details</h2>
+            </div>
+
+            <div class="card">
+                <div class="course-info">
+                    <h3>Course Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Course ID:</span>
+                            <span id="detailsCourseId" class="info-value"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Course Name:</span>
+                            <span id="detailsCourseName" class="info-value"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Faculty Email:</span>
+                            <span id="detailsFacultyEmail" class="info-value"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Evaluation:</span>
+                            <span id="detailsLastEvaluation" class="info-value"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Issues:</span>
+                            <span id="detailsTotalIssues" class="info-value"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Open Issues:</span>
+                            <span id="detailsOpenIssues" class="info-value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="results-header">
+                    <h3>Course Structure and Issues</h3>
+                    <div class="export-controls">
+                        <button id="exportCourseDetailsCsvBtn" class="btn secondary">Export to CSV</button>
+                    </div>
+                </div>
+                <div id="courseStructure" class="course-structure">
+                    <!-- Course structure will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="searchResultTemplate">
+        <div class="search-result-item" data-course-id="">
+            <div class="result-info">
+                <h4 class="course-name"></h4>
+                <div class="result-details">
+                    <span class="course-id"></span>
+                    <span class="faculty-email"></span>
+                    <span class="last-evaluation"></span>
+                    <span class="issue-count"></span>
+                </div>
+            </div>
+            <button class="view-details-btn btn small">View Details</button>
+        </div>
+    </template>
+
+    <template id="unitStructureTemplate">
+        <div class="structure-unit">
+            <div class="structure-header unit-header">
+                <span class="unit-name"></span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="structure-content">
+                <!-- Folders will be populated dynamically -->
+            </div>
+        </div>
+    </template>
+
+    <template id="folderStructureTemplate">
+        <div class="structure-folder">
+            <div class="structure-header folder-header">
+                <span class="folder-name"></span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="structure-content">
+                <!-- Files will be populated dynamically -->
+            </div>
+        </div>
+    </template>
+
+    <template id="fileStructureTemplate">
+        <div class="structure-file">
+            <div class="structure-header file-header">
+                <span class="file-name"></span>
+                <span class="file-type"></span>
+                <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="structure-content">
+                <!-- Issues will be populated dynamically -->
+            </div>
+        </div>
+    </template>
+
+    <template id="issueStructureTemplate">
+        <div class="structure-issue">
+            <div class="issue-header">
+                <span class="issue-name"></span>
+                <span class="issue-status"></span>
+            </div>
+            <div class="issue-details">
+                <div class="issue-description"></div>
+                <div class="issue-notes"></div>
+                <div class="issue-date"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Issue Types Data -->
+    <script src="issueTypes.js"></script>
+    <!-- Records Viewer Logic -->
+    <script src="records.js"></script>
+</body>
+</html>
