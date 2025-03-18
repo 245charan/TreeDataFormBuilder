@@ -262,6 +262,23 @@ textarea:focus {
 }
 
 /* Issues Screen Styles */
+.issues-search-container {
+    margin-bottom: 15px;
+}
+
+.issues-search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+}
+
+.issues-search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
 .issues-list {
     max-height: 600px;
     overflow-y: auto;
@@ -270,6 +287,10 @@ textarea:focus {
 .issue-item {
     border-bottom: 1px solid var(--medium-gray);
     padding: 15px 0;
+}
+
+.issue-item.hidden {
+    display: none;
 }
 
 .issue-header {

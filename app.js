@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const backToBuilderBtn = document.getElementById('backToBuilderBtn');
     const issueTargetHeader = document.getElementById('issueTargetHeader');
     const issuesList = document.getElementById('issuesList');
+    const issuesSearchInput = document.getElementById('issuesSearchInput');
     const doneSelectingIssuesBtn = document.getElementById('doneSelectingIssuesBtn');
 
     // DOM Elements - Review Screen
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event Listeners - Issues Screen
     backToBuilderBtn.addEventListener('click', navigateToBuilder);
     doneSelectingIssuesBtn.addEventListener('click', doneSelectingIssues);
+    issuesSearchInput.addEventListener('input', filterIssues);
 
     // Event Listeners - Review Screen
     backToBuilderFromReviewBtn.addEventListener('click', navigateToBuilder);
@@ -649,6 +651,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Set issue ID
             issueItem.dataset.issueId = issueType.id;
+            // Set search text attribute for filtering
+            issueItem.dataset.searchText = (issueType.name + ' ' + issueType.description).toLowerCase();
             
             // Get issue elements
             const issueCheckbox = issueItem.querySelector('.issue-checkbox');
@@ -788,6 +792,21 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add the issue to the list
             issuesList.appendChild(issueItem);
+        });
+    }
+
+    // Filter issues based on search input
+    function filterIssues() {
+        const searchText = issuesSearchInput.value.toLowerCase();
+        const issueItems = issuesList.querySelectorAll('.issue-item');
+        
+        issueItems.forEach(item => {
+            const itemText = item.dataset.searchText;
+            if (itemText.includes(searchText)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
         });
     }
 
